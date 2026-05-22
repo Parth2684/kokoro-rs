@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::path::Path;
 
 use ndarray::Array2;
-use ort::execution_providers::CPUExecutionProvider;
+use ort::execution_providers::{CPUExecutionProvider, CUDAExecutionProvider, ROCmExecutionProvider, DirectMLExecutionProvider, NNAPIExecutionProvider, XNNPACKExecutionProvider, CoreMLExecutionProvider};
 use ort::inputs;
 use ort::session::builder::GraphOptimizationLevel;
 use ort::session::Session;
@@ -27,6 +27,8 @@ const CHUNK_CROSSFADE_SAMPLES: usize = 240; // 10ms @ 24kHz
 pub enum KokoroError {
     #[error("ONNX runtime error: {0}")]
     Ort(#[from] ort::Error),
+    #[error("ORT session builder error: {0}")]
+    OrtSessionBuilder(#[from] ort::Error<ort::session::builder::SessionBuilder>),
     #[error("I/O error: {0}")]
     Io(#[from] std::io::Error),
     #[error("Array shape error: {0}")]
@@ -260,8 +262,15 @@ fn init_session(
     num_threads: Option<usize>,
     optimized_cache_path: Option<&Path>,
 ) -> Result<Session, KokoroError> {
-    let providers = vec![CPUExecutionProvider::default().build()];
-
+    let providers = vec![
+        CUDAExecutionProvider::default().build(),
+        ROCmExecutionProvider::default().build(),
+        DirectMLExecutionProvider::default().build(),
+        CoreMLExecutionProvider::default().build(),
+        NNAPIExecutionProvider::default().build(),
+        XNNPACKExecutionProvider::default().build(),
+        CPUExecutionProvider::default().build(),
+    ];
     // Choose load path and optimization level depending on cache state.
     let (load_path, opt_level, write_cache) = match optimized_cache_path {
         // Pre-optimized graph already on disk → load it directly, skip optimization.

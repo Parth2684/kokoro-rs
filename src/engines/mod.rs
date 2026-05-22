@@ -7,5 +7,5 @@
 //! Enable engines via Cargo features:
 //! - `kokoro` - Kokoro TTS (ONNX format, espeak-ng required)
 
-#[cfg(feature = "kokoro")]
+// #[cfg(feature = "kokoro")]
 pub mod kokoro;

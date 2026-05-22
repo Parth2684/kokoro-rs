@@ -6,11 +6,7 @@ description = "A Rust library for text-to-speech synthesis using the Kokoro engi
 license = "MIT"
 repository = "https://github.com/rishiskhare/tts-rs"
 
-[features]
-default = []
 
-# TTS engines
-kokoro = ["dep:ort", "dep:ndarray", "dep:zip"]
 
 [dependencies]
 # Always required
@@ -21,12 +17,8 @@ log = "0.4.28"
 env_logger = "0.10.0"
 thiserror = "2.0.16"
 derive_builder = { version = "0.20.2" }
+ort = { version = "2.0.0-rc.10" }
+ndarray = { version = "0.17" }
+zip = { version = "2", default-features = false, features = ["deflate"] }
 
-# Kokoro (ONNX-based)
-ort = { version = "2.0.0-rc.10", optional = true }
-ndarray = { version = "0.17", optional = true }
-zip = { version = "2", optional = true, default-features = false, features = ["deflate"] }
 
-[[example]]
-name = "kokoro"
-required-features = ["kokoro"]
