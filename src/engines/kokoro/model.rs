@@ -249,7 +249,7 @@ fn find_onnx_file(model_dir: &Path) -> Result<std::path::PathBuf, KokoroError> {
 }
 
 /// Initialize an ONNX session with optional on-disk graph caching.
-///
+///xnnpack
 /// The first time a model is loaded, ORT runs Level3 graph optimization (5–10 s)
 /// and serialises the result to `optimized_cache_path`.  Every subsequent load
 /// reads the pre-optimized file directly at `Disable` optimization level, cutting

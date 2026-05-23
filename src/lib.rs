@@ -46,14 +46,20 @@ impl SynthesisResult {
     /// Write the audio to a 32-bit float WAV file.
     pub fn write_wav(&self, path: &Path) -> Result<(), Box<dyn std::error::Error>> {
         let spec = hound::WavSpec {
-            channels: 1,
+            channels: 2,
             sample_rate: self.sample_rate,
             bits_per_sample: 32,
             sample_format: hound::SampleFormat::Float,
         };
         let mut writer = hound::WavWriter::create(path, spec)?;
+        let max = &self.samples
+            .iter()
+            .copied()
+            .fold(0.0_f32, |a, b| a.max(b.abs()));
+        
+        let gain = 0.95 / max;
         for &sample in &self.samples {
-            writer.write_sample(sample)?;
+            writer.write_sample(sample * gain)?;
         }
         writer.finalize()?;
         Ok(())
