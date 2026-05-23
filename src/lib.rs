@@ -52,14 +52,9 @@ impl SynthesisResult {
             sample_format: hound::SampleFormat::Float,
         };
         let mut writer = hound::WavWriter::create(path, spec)?;
-        let max = &self.samples
-            .iter()
-            .copied()
-            .fold(0.0_f32, |a, b| a.max(b.abs()));
-        
-        let gain = 0.95 / max;
+       
         for &sample in &self.samples {
-            writer.write_sample(sample * gain)?;
+            writer.write_sample(sample)?;
         }
         writer.finalize()?;
         Ok(())
