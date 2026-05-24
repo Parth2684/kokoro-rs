@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::path::Path;
 
 use ndarray::Array2;
-use ort::execution_providers::{CPUExecutionProvider, CUDAExecutionProvider, ROCmExecutionProvider, DirectMLExecutionProvider, NNAPIExecutionProvider, XNNPACKExecutionProvider, CoreMLExecutionProvider};
+use ort::execution_providers::{CUDAExecutionProvider, ROCmExecutionProvider, DirectMLExecutionProvider, XNNPACKExecutionProvider, CoreMLExecutionProvider};
 use ort::inputs;
 use ort::session::builder::GraphOptimizationLevel;
 use ort::session::Session;
@@ -300,7 +300,9 @@ fn init_session(
     let mut builder = Session::builder()?
         .with_optimization_level(opt_level)?
         .with_execution_providers(providers)?
-        .with_parallel_execution(true)?;
+        .with_parallel_execution(true)?
+        .with_memory_pattern(true)?
+        .with_log_level(ort::logging::LogLevel::Verbose)?;
 
     if write_cache {
         // Serialise the optimized graph so the next launch can skip optimization.
