@@ -55,6 +55,7 @@ impl SynthesisResult {
        
         for &sample in &self.samples {
             writer.write_sample(sample)?;
+            writer.write_sample(sample)?;
         }
         writer.finalize()?;
         Ok(())
