@@ -299,7 +299,7 @@ fn init_session(
 
     let mut builder = Session::builder()?
         .with_optimization_level(opt_level)?
-        .with_execution_providers(providers)
+        .with_execution_providers(providers)?
         .with_parallel_execution(true)?;
 
     if write_cache {
