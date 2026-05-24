@@ -267,9 +267,9 @@ fn init_session(
         ROCmExecutionProvider::default().build(),
         DirectMLExecutionProvider::default().build(),
         CoreMLExecutionProvider::default().build(),
-        NNAPIExecutionProvider::default().build(),
+        // NNAPIExecutionProvider::default().build(),
         XNNPACKExecutionProvider::default().build(),
-        CPUExecutionProvider::default().build(),
+        // CPUExecutionProvider::default().build(),
     ];
     // Choose load path and optimization level depending on cache state.
     let (load_path, opt_level, write_cache) = match optimized_cache_path {
@@ -299,7 +299,7 @@ fn init_session(
 
     let mut builder = Session::builder()?
         .with_optimization_level(opt_level)?
-        .with_execution_providers(providers)?
+        .with_execution_providers(providers)
         .with_parallel_execution(true)?;
 
     if write_cache {
