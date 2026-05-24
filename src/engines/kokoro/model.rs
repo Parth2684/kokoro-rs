@@ -300,10 +300,8 @@ fn init_session(
     let mut builder = Session::builder()?
         .with_optimization_level(opt_level)?
         .with_execution_providers(providers)?
-        .with_parallel_execution(true)?
-        .with_memory_pattern(true)?
-        .with_log_level(ort::logging::LogLevel::Verbose)?;
-
+        .with_parallel_execution(true)?;
+    
     if write_cache {
         // Serialise the optimized graph so the next launch can skip optimization.
         let cache = optimized_cache_path.unwrap();
